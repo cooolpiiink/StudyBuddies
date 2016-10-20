@@ -3,7 +3,7 @@ var router = express.Router();
 var options = {promiseLib: Promise};
 var pgp = require('pg-promise')(options);
 var pg = require('pg');
-var paths = require('path');
+var path = require('path');
 var connectionString = 'postgres://postgres:12345@localhost:5432/studybuddies';
 var app = express();
 var fs = require('fs');
@@ -20,8 +20,15 @@ client.connect();
 app.get("/studybuddies/groupchat/insert/:gname", function(req,res){
 	client.query("insert into groupchat(groupname) values ('"+req.params.gname+"');");
 
-	paths = "C:/Users/Pauline Sarana/Desktop/studybuddies/StudyBuddies/Server/testing/"+req.params.gname+".txt"; //change this path
-	fs.writeFileSync(paths, data, "UTF-8", {'flags': 'a+'});
+	// paths = "C:/Users/Pauline Sarana/Desktop/studybuddies/StudyBuddies/Server/testing/"+req.params.gname+".txt"; //change this path
+	// fs.writeFileSync(paths, data, "UTF-8", {'flags': 'a+'});
+
+	var data = "Halloo!!"
+	fs.writeFile("C:/Users/Pauline Sarana/Desktop/studybuddies/StudyBuddies/Server/testing/"+req.params.gname+".txt", data, function (err) {
+    if (err) 
+        return console.log(err);
+    console.log('file created');
+});
 
 	console.log('Insert groupname in groupchat');
 	res.send('Inserted '+req.params.gname+' into groupchat');
