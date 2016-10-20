@@ -16,7 +16,7 @@ const results=[];
 var client = new pg.Client(connectionString);
 client.connect();
 
-
+//for create group
 app.get("/studybuddies/groupchat/insert/:gname", function(req,res){
 	client.query("insert into groupchat(groupname) values ('"+req.params.gname+"');");
 
@@ -26,24 +26,13 @@ app.get("/studybuddies/groupchat/insert/:gname", function(req,res){
 	console.log('Insert groupname in groupchat');
 	res.send('Inserted '+req.params.gname+' into groupchat');
 });
-
+//for registration of user, insert into buddy
 app.get("/studybuddies/buddy/insert/:username/:password/:fname/:lname", function(req,res){
 	client.query("insert into buddy(username,password,fname,lname) values ('"+req.params.username+"','"+req.params.password+"','"+req.params.fname+"','"+req.params.lname+"');");
 	console.log('Insert into buddy');
 	res.send('Inserted '+req.params.username+' into buddy');
 }); 
-
-app.get("/studybuddies/groupchat/select", function(req, res){
-	client.query("select * from groupchat", function(err, rows, fields){
-		if(!err){
-			res.send("Selected");
-			console.log(rows);
-		}else{
-			console.log('No results.');
-		}
-	});
-});
-
+//for log-in
 app.get("/studybuddies/buddy/login/:username/:password", function(req, res){
 	var results = [];
 
@@ -58,6 +47,17 @@ app.get("/studybuddies/buddy/login/:username/:password", function(req, res){
 		done();
 	});
 	console.log('Logging In');
+});
+//wala pa ni
+app.get("/studybuddies/groupchat/select", function(req, res){
+	client.query("select * from groupchat", function(err, rows, fields){
+		if(!err){
+			res.send("Selected");
+			console.log(rows);
+		}else{
+			console.log('No results.');
+		}
+	});
 });
 
 app.listen(8080, function(){
