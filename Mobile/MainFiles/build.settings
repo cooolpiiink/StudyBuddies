@@ -5,4 +5,12 @@ settings =
 		default ="portrait",
 		supported = {"portrait"},
 	},
+
+	android = 
+	{
+		usesPermission = 
+		{
+			"android.permission.INTERNET",
+		},
+	},
 }
