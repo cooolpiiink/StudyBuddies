@@ -1,0 +1,23 @@
+{
+  "name": "studybuddies",
+  "version": "1.0.0",
+  "description": "Projecg",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pauline Saraña",
+  "license": "ISC",
+  "dependencies": {
+    "express": "*",
+    "pg": "*",
+    "pg-promise": "*",
+    "prompt" : "*",
+    "http" : "*",
+    "httpdispatcher" : "*",
+    "path" : "*",
+    "fs" : "*",
+    "url-parse": "*",
+    "url" : "*"
+  }
+}
