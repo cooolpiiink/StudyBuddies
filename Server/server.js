@@ -55,6 +55,22 @@ app.get("/studybuddies/buddy/login/:username/:password", function(req, res){
 	});
 	console.log('Logging In');
 });
+//pag view sa mga groupname
+app.get("/viewGroups",function(req,res){
+
+	var results = [];
+	var query = client.query("SELECT groupname from groupchat");
+
+	query.on('row', (row) => {
+      results.push(row);
+    });
+    query.on('end', () => {
+      return res.send({'chat':results});
+      done();
+    });    
+
+    console.log("viewing..");
+});
 //wala pa ni
 app.get("/studybuddies/groupchat/select", function(req, res){
 	client.query("select * from groupchat", function(err, rows, fields){
