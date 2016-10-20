@@ -79,20 +79,10 @@ function scene:create( event )
 
 
 	labelUsername = display.newText( sceneGroup, "Username:", 375, 400, native.systemFont, 40)
-	textUsername = native.newTextField(375, 470, 500, 60)
-	sceneGroup:insert( textUsername )
-	textUsername.size = 38
+	sceneGroup:insert( labelUsername )
 
 	labelPassword = display.newText( sceneGroup, "Password:", 375, 545, native.systemFont, 40)
-	textPassword = native.newTextField(375, 610, 500, 60)
-	sceneGroup:insert( textPassword )
-	textPassword.size = 38
-	textPassword.isSecure = true
-
-
-	labelFeedback = display.newText( sceneGroup, "", 250, 300, native.systemFont, 28 )
-
-	
+	sceneGroup:insert( labelPassword )	
 
 	
 	function  background:tap(event)
@@ -123,6 +113,19 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
+		textUsername = native.newTextField(375, 470, 500, 60)
+		textUsername:addEventListener("userInput", fieldHandler(function() return textUsername end))
+		sceneGroup:insert( textUsername )
+		textUsername.size = 38
+		textUsername.placeHolder = "Username"
+
+		textPassword = native.newTextField(375, 610, 500, 60)
+		textPassword:addEventListener("userInput", fieldHandler(function() return textPassword end))
+		sceneGroup:insert( textPassword )
+		textPassword.size = 38
+		textPassword.isSecure = true
+		textPassword.placeHolder = "Password"
+
 		function textUsername:userInput(event)
 			if event.phase == "began" then
 				event.target.text = ''

@@ -20,7 +20,7 @@ client.connect();
 app.get("/studybuddies/groupchat/insert/:gname", function(req,res){
 	client.query("insert into groupchat(groupname) values ('"+req.params.gname+"');");
 
-	paths = "testing/"+req.params.gname+".txt"; //change this path
+	paths = "C:/Users/Pauline Sarana/Desktop/studybuddies/StudyBuddies/Server/testing/"+req.params.gname+".txt"; //change this path
 	fs.writeFileSync(paths, data, "UTF-8", {'flags': 'a+'});
 
 	console.log('Insert groupname in groupchat');
