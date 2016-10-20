@@ -34,13 +34,13 @@ local function gotoLogin()
 				scene:addEventListener( "show", scene )
 			else 
 				print(jsonstr)
-				composer.removeScene( "login" )
-				composer.gotoScene("login",{ time=800, effect="crossFade" })
+				composer.removeScene( "loggedin" )
+				composer.gotoScene("loggedin",{ time=800, effect="crossFade" })
 			end
 		end
 	end
 
-	network.request( ("http://localhost:8080/studybuddies/buddy/login/"..uname.."/"..pword), "GET", networkListener)
+	network.request( ("http://192.168.43.114:8080/studybuddies/buddy/login/"..uname.."/"..pword), "GET", networkListener)
 
     -- composer.gotoScene( "login", { time=800, effect="crossFade" })
 end

@@ -22,9 +22,9 @@ local function gotoCreateGroup()
 	end
 	
 	print(gnameni)
-	network.request( "http://localhost:8080/studybuddies/groupchat/insert/"..gnameni, "GET", networkListener)
+	network.request( "http://192.168.43.114:8080/studybuddies/groupchat/insert/"..gnameni, "GET", networkListener)
 
-	composer.gotoScene("login", { time=800, effect="crossFade" })
+	composer.gotoScene("loggedin", { time=800, effect="crossFade" })
 	-- body
 end
 
