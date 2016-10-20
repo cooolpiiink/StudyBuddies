@@ -8,7 +8,7 @@ settings =
 
 	android = 
 	{
-		usesPermission = 
+		usesPermissions = 
 		{
 			"android.permission.INTERNET",
 		},
