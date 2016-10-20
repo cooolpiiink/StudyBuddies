@@ -4,7 +4,8 @@
   "description": "Projecg",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "author": "Pauline Saraña",
   "license": "ISC",
@@ -12,12 +13,12 @@
     "express": "*",
     "pg": "*",
     "pg-promise": "*",
-    "prompt" : "*",
-    "http" : "*",
-    "httpdispatcher" : "*",
-    "path" : "*",
-    "fs" : "*",
+    "prompt": "*",
+    "http": "*",
+    "httpdispatcher": "*",
+    "path": "*",
+    "fs": "*",
     "url-parse": "*",
-    "url" : "*"
+    "url": "*"
   }
 }
