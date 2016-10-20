@@ -28,7 +28,7 @@ app.get("/studybuddies/groupchat/insert/:gname", function(req,res){
     if (err) 
         return console.log(err);
     console.log('file created');
-});
+	});
 
 	console.log('Insert groupname in groupchat');
 	res.send('Inserted '+req.params.gname+' into groupchat');
