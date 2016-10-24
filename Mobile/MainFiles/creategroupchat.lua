@@ -49,7 +49,8 @@ function scene:create( event )
 	backGroup = display.newGroup()  -- Display group for the background image
 	sceneGroup:insert( backGroup )
 
-	uid = event.params.uid
+	uid = event.params.uid -- userid of current user
+	print(uid)
 
 	local background = display.newImageRect( backGroup, "background.png", 800, 1400 )
 	background.x = display.contentCenterX

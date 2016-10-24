@@ -49,6 +49,9 @@ function scene:create( event )
 	
 	local sceneGroup = self.view
 
+	uid = event.params.uid -- userid of current user
+	print(uid)
+
 	backGroup = display.newGroup()
 	sceneGroup:insert(backGroup)
 
@@ -136,9 +139,6 @@ function scene:show( event )
 			end
 		end
 
-		uid = event.params.uid
-		print(uid)
-
 		local function networkListener( event )
 			if ( event.isError ) then
 				print( "Network error: ", event.response )
@@ -153,9 +153,15 @@ function scene:show( event )
 				end
 			end
 		end
+
 		--network.request( ("http://192.168.43.114:8080/studybuddies/groupchat/select"), "GET", networkListener)
 		network.request( ("http://localhost:8080/studybuddies/groupchat/select"), "GET", networkListener)
 
+		local function viewGroups( event )
+			-- print(tostring(event.time/1000).." seconds")
+		end
+
+		Runtime:addEventListener("enterFrame", viewGroups)
 		textJoinGroup:addEventListener("userInput", textJoinGroup)
 	end
 end

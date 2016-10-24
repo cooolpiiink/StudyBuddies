@@ -15,7 +15,7 @@ const results=[];
 var client = new pg.Client(connectionString);
 client.connect();
 
-//for create group
+//for create group, insert into groupchat
 app.get("/studybuddies/groupchat/insert/:gname/:uid", function(req,res){
 	client.query("insert into groupchat(groupname) values ('"+req.params.gname+"');");
 
@@ -75,7 +75,7 @@ app.get("/studybuddies/groupchat/select",function(req,res){
     console.log("viewing..");
 });
 
-//join groupchat
+//join groupchat, if .. insert into junctable
 app.get("/studybuddies/groupchat/join/:gname/:uid", function(req,res){
 	client.query("select groupid from groupchat where groupname = '" + req.params.gname+ "';", function (err, result){
 		if(result.rows[0].groupid != null){
