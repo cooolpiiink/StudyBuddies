@@ -9,6 +9,9 @@ local decres
 local dgroupname
 local uid
 
+local textJoinGroup
+local groupname
+
 local function fieldHandler( textField )
 	return function( event )
 		if ( "began" == event.phase ) then
@@ -57,15 +60,53 @@ function scene:create( event )
 	title.x = display.contentCenterX
 	title.y = 200
 
-	createGroupChatButton = display.newText( sceneGroup, "Create Group", display.contentCenterX, 800, native.systemFont, 44 )
+	createGroupChatButton = display.newText( sceneGroup, "Create Group", display.contentCenterX, 950, native.systemFont, 44 )
 	createGroupChatButton:setFillColor( 0.75, 0.78, 1 )
-
 	createGroupChatButton:addEventListener("tap", gotoCreateGroupChat)
 
-	--function  background:tap(event)
-	--	native.setKeyboardFocus( nil )
-	--end
-	
+	--eventhandler for buttonid = joinbutton
+	local function handleButtonEvent( event )
+		if(event.phase == "ended") then
+			local function networkListener( event )
+				if ( event.isError ) then
+					print( "Network error: ", event.response )
+				else
+					print( "RESPONSE: ", event.response )
+				end
+			end
+			--network.request( ("http://192.168.43.114:8080/studybuddies/groupchat/join/"..groupname.."/"..uid), "GET", networkListener)
+			network.request( ("http://localhost:8080/studybuddies/groupchat/join/"..groupname.."/"..uid), "GET", networkListener)
+			local options = {
+				effect = "crossFade",
+				time = 800,
+				params = {
+					uid = uid
+				}
+			}
+			--composer.gotoScene("groupchat", options)
+			print("Pressed")
+		end
+	end
+
+	local joingroupButton = widget.newButton(
+		{
+			x = 600,
+			y = 875,
+			shape = "rect",
+			id = "joinbutton",
+			label = "JOIN",
+			fontSize = 25,
+			fillColor = { default={ 1, 0.5, 0.5, 0.5 }, over={ 1, 0.2, 0.5, 1 } },
+			onEvent = handleButtonEvent
+		}
+	)
+	sceneGroup:insert(joingroupButton)
+
+	function  background:tap(event)
+		native.setKeyboardFocus( nil )
+	end
+
+	background:addEventListener("tap", background)
 end
 
 -- show()
@@ -79,7 +120,25 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
+		textJoinGroup = native.newTextField(300, 875, 400, 65)
+		textJoinGroup:addEventListener("userInput", fieldHandler(function() return textJoinGroup end))
+		sceneGroup:insert( textJoinGroup )
+		textJoinGroup.size = 38
+		textJoinGroup.placeholder = "Groupname"
+
+		function textJoinGroup:userInput(event)
+			if event.phase == "began" then
+				event.target.text = ''
+			elseif event.phase == "ended" then
+				groupname = event.target.text
+				print(groupname)
+			elseif event.phase == "Submitted" then
+			end
+		end
+
 		uid = event.params.uid
+		print(uid)
+
 		local function networkListener( event )
 			if ( event.isError ) then
 				print( "Network error: ", event.response )
@@ -94,8 +153,10 @@ function scene:show( event )
 				end
 			end
 		end
-		--network.request( ("http://192.168.43.114:8080/viewGroups"), "GET", networkListener)
-		network.request( ("http://localhost:8080/viewGroups"), "GET", networkListener)
+		--network.request( ("http://192.168.43.114:8080/studybuddies/groupchat/select"), "GET", networkListener)
+		network.request( ("http://localhost:8080/studybuddies/groupchat/select"), "GET", networkListener)
+
+		textJoinGroup:addEventListener("userInput", textJoinGroup)
 	end
 end
 
@@ -108,9 +169,10 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
+		textJoinGroup:removeSelf()
+		textJoinGroup = nil
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
-
 	end
 end
 
@@ -122,7 +184,6 @@ function scene:destroy( event )
 	-- Code here runs prior to the removal of scene's view
 
 end
-
 
 
 -- -----------------------------------------------------------------------------------

@@ -21,7 +21,7 @@ local function gotoCreateGroup()
 			print ( "RESPONSE: " .. event.response )
 		end
 	end
-	--network.request( "http://192.168.43.114:8080/studybuddies/groupchat/insert/"..gnameni"/"..userid, "GET", networkListener)
+	-- network.request( "http://192.168.43.114:8080/studybuddies/groupchat/insert/"..gnameni.."/"..uid, "GET", networkListener)
 	network.request( "http://localhost:8080/studybuddies/groupchat/insert/"..gnameni.."/"..uid, "GET", networkListener)
 
 	local options = {
@@ -66,6 +66,11 @@ function scene:create( event )
 	createButton:addEventListener("tap", gotoCreateGroup)
 	checkButton:addEventListener("tap", gotoCheck)
 
+	function  background:tap(event)
+		native.setKeyboardFocus( nil )
+	end
+
+	background:addEventListener("tap", background)
 end
 
 local function fieldHandler( textField )
@@ -103,7 +108,7 @@ function scene:show( event )
 		textGroupname:addEventListener("userInput", fieldHandler(function() return textGroupname end))
 		sceneGroup:insert( textGroupname )
 		textGroupname.size = 38
-		textGroupname.placeHolder = "Group name"
+		textGroupname.placeholder = "Group name"
 
 		function textGroupname:userInput(event)
 			if event.phase == "began" then

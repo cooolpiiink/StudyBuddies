@@ -29,10 +29,7 @@ app.get("/studybuddies/groupchat/insert/:gname/:uid", function(req,res){
 	var groupid = client.query("select groupid from groupchat where groupname = '" + req.params.gname+ "';", function (err, result){
 		console.log(result.rows[0].groupid);
 		client.query("insert into junctable (userid, groupid) values (" + req.params.uid + "," + result.rows[0].groupid +");");
-
 	});
-
-	//client.query("insert into junctable (userid, groupid) values (" + req.params.uid + "," + groupid+");");
 
 	console.log('Insert groupname in groupchat');
 	res.send('Inserted '+req.params.gname+' into groupchat');
@@ -62,8 +59,8 @@ app.get("/studybuddies/buddy/login/:username/:password", function(req, res){
 	console.log('Logging In');
 });
 
-//pag view sa mga groupname
-app.get("/viewGroups",function(req,res){
+//view groupnames
+app.get("/studybuddies/groupchat/select",function(req,res){
 
 	var results = [];
 	var query = client.query("SELECT groupname from groupchat");
@@ -78,14 +75,31 @@ app.get("/viewGroups",function(req,res){
     console.log("viewing..");
 });
 
-//wala pa ni
-app.get("/studybuddies/groupchat/select", function(req, res){
-	client.query("select * from groupchat", function(err, rows, fields){
-		if(!err){
-			res.send("Selected");
-			console.log(rows);
-		}else{
-			console.log('No results.');
+//join groupchat
+app.get("/studybuddies/groupchat/join/:gname/:uid", function(req,res){
+	client.query("select groupid from groupchat where groupname = '" + req.params.gname+ "';", function (err, result){
+		if(result.rows[0].groupid != null){
+			var gid = result.rows[0].groupid;
+			console.log("groupid = " + gid);
+			client.query("select userid from junctable where groupid = '" + gid + "';", function (err, result){
+				var bool = true;
+				for(var i = 0; i < result.rows.length; i++){
+					if(result.rows[i].userid == req.params.uid)
+						bool = false;
+				}
+				if (bool) {
+					client.query("insert into junctable (userid, groupid) values (" + req.params.uid + "," + gid +");");
+					console.log("Inserted into junctable");
+					res.send("Inserted into junctable");
+				}
+				else{
+					res.send("In group already");
+				}
+			});
+		}
+		else{
+			res.send("Groupchat does not exist");
+			console.log("Groupchat does not exist");
 		}
 	});
 });

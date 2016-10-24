@@ -134,42 +134,32 @@ function scene:show( event )
 		textUsername:addEventListener("userInput", fieldHandler(function() return textUsername end))
 		sceneGroup:insert( textUsername )
 		textUsername.size = 38
-		textUsername.placeHolder = "Username"
+		textUsername.placeholder = "Username"
 
 		textPassword = native.newTextField(375, 610, 500, 60)
 		textPassword:addEventListener("userInput", fieldHandler(function() return textPassword end))
 		sceneGroup:insert( textPassword )
 		textPassword.size = 38
 		textPassword.isSecure = true
-		textPassword.placeHolder = "Password"
+		textPassword.placeholder = "Password"
 
 		function textUsername:userInput(event)
 			if event.phase == "began" then
 				event.target.text = ''
-				--labelFeedback.text = "waiting"
 			elseif event.phase == "ended" then
 				uname = event.target.text
 				print(uname)
-				--labelFeedback.text = "Thank you" .. " " .. event.target.text
 			elseif event.phase == "Submitted" then
-				--	labelFeedback.text = "Hello".. " " .. event.target.text
-				--elseif event.phase == "editing" then
-				-- labelFeedback.text = event.startPosition
 			end
 		end
 
 		function textPassword:userInput(event)
 			if event.phase == "began" then
 				event.target.text = ''
-				--labelFeedback.text = "waiting"
 			elseif event.phase == "ended" then
 				pword = event.target.text
 				print(pword)
-				--labelFeedback.text = "Thank you" .. " " .. event.target.text
 			elseif event.phase == "Submitted" then
-				--labelFeedback.text = "Hello".. " " .. event.target.text
-			--elseif event.phase == "editing" then
-				--labelFeedback.text = event.startPosition
 			end
 		end
 
