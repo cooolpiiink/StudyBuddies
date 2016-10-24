@@ -11,6 +11,7 @@ local labelGroupname
 local createButton
 local textGroupname
 local gnameni
+local uid
 
 local function gotoCreateGroup()
 	local function networkListener( event )
@@ -20,11 +21,17 @@ local function gotoCreateGroup()
 			print ( "RESPONSE: " .. event.response )
 		end
 	end
-	
-	print(gnameni)
-	network.request( "http://192.168.43.114:8080/studybuddies/groupchat/insert/"..gnameni, "GET", networkListener)
+	--network.request( "http://192.168.43.114:8080/studybuddies/groupchat/insert/"..gnameni"/"..userid, "GET", networkListener)
+	network.request( "http://localhost:8080/studybuddies/groupchat/insert/"..gnameni.."/"..uid, "GET", networkListener)
 
-	composer.gotoScene("loggedin", { time=800, effect="crossFade" })
+	local options = {
+		effect = "crossFade",
+		time = 800,
+		params = {
+			uid = uid
+		}
+	}
+	composer.gotoScene("viewgroup", options)
 	-- body
 end
 
@@ -41,6 +48,8 @@ function scene:create( event )
 
 	backGroup = display.newGroup()  -- Display group for the background image
 	sceneGroup:insert( backGroup )
+
+	uid = event.params.uid
 
 	local background = display.newImageRect( backGroup, "background.png", 800, 1400 )
 	background.x = display.contentCenterX

@@ -21,8 +21,19 @@ local function gotoRegister()
     composer.gotoScene( "register", { time=800, effect="crossFade" })
 end
 
+local function onComplete( event )
+	if (event.action == "clicked") then
+		local i = event.index
+		if(i==1) then
+
+		elseif (i==2) then
+			composer.removeScene("register")
+			composer.gotoScene("register")
+		end
+	end
+end
+
 local function gotoLogin()
-	
 	local function networkListener( event )
 		if ( event.isError ) then
 			print( "Network error: ", event.response )
@@ -30,19 +41,25 @@ local function gotoLogin()
 			jsonstr = event.response
 			if(jsonstr=='[]') then
 				print(jsonstr)
-				scene:addEventListener( "create", scene )
-				scene:addEventListener( "show", scene )
+				local alert = native.showAlert("Error on Log-in", "Invalid Username or Password", {"Ok", "Register"}, onComplete)
 			else 
+				local infos = json.decode(jsonstr)
+				local options = {
+					effect = "crossFade",
+					time = 800,
+					params = {
+						uid = infos[1].userid
+					}
+				}
 				print(jsonstr)
-				composer.removeScene( "loggedin" )
-				composer.gotoScene("loggedin",{ time=800, effect="crossFade" })
+				composer.removeScene("viewgroup")
+				composer.gotoScene("viewgroup", options)
 			end
 		end
 	end
 
-	network.request( ("http://192.168.43.114:8080/studybuddies/buddy/login/"..uname.."/"..pword), "GET", networkListener)
-
-    -- composer.gotoScene( "login", { time=800, effect="crossFade" })
+	--network.request( ("http://192.168.43.114:8080/studybuddies/buddy/login/"..uname.."/"..pword), "GET", networkListener)
+	network.request( ("http://localhost:8080/studybuddies/buddy/login/"..uname.."/"..pword), "GET", networkListener)
 end
 
 local function fieldHandler( textField )

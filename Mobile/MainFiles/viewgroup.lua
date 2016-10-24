@@ -4,18 +4,10 @@ local scene = composer.newScene()
 local widget = require( "widget" )
 local json = require("json");
 
-local labelUsername
-local labelPassword
-local labelFeedback
-local textUsername
-local textPassword
 local res
 local decres
-
 local dgroupname
-
-
-	
+local uid
 
 local function fieldHandler( textField )
 	return function( event )
@@ -38,6 +30,18 @@ local function fieldHandler( textField )
 	end
 end
 
+local function gotoCreateGroupChat()
+	composer.removeScene( "creategroupchat" )
+	local options = {
+		effect = "crossFade",
+		time = 800,
+		params = {
+			uid = uid
+		}
+	}
+    composer.gotoScene( "creategroupchat", options)
+end
+
 function scene:create( event )
 	
 	local sceneGroup = self.view
@@ -53,20 +57,16 @@ function scene:create( event )
 	title.x = display.contentCenterX
 	title.y = 200
 
+	createGroupChatButton = display.newText( sceneGroup, "Create Group", display.contentCenterX, 800, native.systemFont, 44 )
+	createGroupChatButton:setFillColor( 0.75, 0.78, 1 )
 
+	createGroupChatButton:addEventListener("tap", gotoCreateGroupChat)
 
-
-	
-
-	
-	function  background:tap(event)
-		native.setKeyboardFocus( nil )
-	end
-
-	background:addEventListener("tap", background)
+	--function  background:tap(event)
+	--	native.setKeyboardFocus( nil )
+	--end
 	
 end
-
 
 -- show()
 function scene:show( event )
@@ -79,28 +79,22 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
+		uid = event.params.uid
 		local function networkListener( event )
 			if ( event.isError ) then
 				print( "Network error: ", event.response )
 			else
 				decres = json.decode(event.response)
 				local i=1
-				res = decres.chat[1].groupname
-				while res do
-					dgroupname = display.newText( sceneGroup, res, display.contentCenterX, 300+(30*(i-1)), native.systemFont, 30 )
+				while decres.chat[i] do
+					res = decres.chat[i].groupname
+					dgroupname = display.newText( sceneGroup, res, display.contentCenterX, 400+(30*(i-1)), native.systemFont, 30 )
 					sceneGroup:insert( dgroupname )
 					i = i+1
-					res = decres.chat[i].groupname
 				end
-				-- res = decres.chat[1].groupname
-				-- print(res)
-				-- dgroupname = display.newText( sceneGroup, res, display.contentCenterX, 300, native.systemFont, 30 )
-				-- sceneGroup:insert( dgroupname )
-				-- res = decres.chat[2].groupname
-				-- dgroupname = display.newText( sceneGroup, res, display.contentCenterX, 330, native.systemFont, 30 )
-				-- sceneGroup:insert( dgroupname)
 			end
 		end
+		--network.request( ("http://192.168.43.114:8080/viewGroups"), "GET", networkListener)
 		network.request( ("http://localhost:8080/viewGroups"), "GET", networkListener)
 	end
 end

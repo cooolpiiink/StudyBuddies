@@ -16,7 +16,7 @@ var client = new pg.Client(connectionString);
 client.connect();
 
 //for create group
-app.get("/studybuddies/groupchat/insert/:gname", function(req,res){
+app.get("/studybuddies/groupchat/insert/:gname/:uid", function(req,res){
 	client.query("insert into groupchat(groupname) values ('"+req.params.gname+"');");
 
 	var data = "Halloo!!"
@@ -25,6 +25,14 @@ app.get("/studybuddies/groupchat/insert/:gname", function(req,res){
         return console.log(err);
     console.log('file created');
 	});
+
+	var groupid = client.query("select groupid from groupchat where groupname = '" + req.params.gname+ "';", function (err, result){
+		console.log(result.rows[0].groupid);
+		client.query("insert into junctable (userid, groupid) values (" + req.params.uid + "," + result.rows[0].groupid +");");
+
+	});
+
+	//client.query("insert into junctable (userid, groupid) values (" + req.params.uid + "," + groupid+");");
 
 	console.log('Insert groupname in groupchat');
 	res.send('Inserted '+req.params.gname+' into groupchat');
@@ -67,7 +75,6 @@ app.get("/viewGroups",function(req,res){
       return res.send({'chat':results});
       done();
     });    
-
     console.log("viewing..");
 });
 
@@ -86,38 +93,3 @@ app.get("/studybuddies/groupchat/select", function(req, res){
 app.listen(8080, function(){
 	console.log("Server at port 8080");
 });
-
-
-
-
-
-// client.query("insert into buddy(username,password,fname,lname) values ('user3','pass3','fname3','lname3');");
-
-// var peeps = [
-// 	{name : 'name1', age : 1},
-// 	{name : 'name2', age : 2},
-// 	{name : 'name3', age : 3},
-// 	{name : 'name4', age : 4}
-// ];
-
-// app.get("/peeps", function(req,res){
-// 	res.json(peeps);
-// 	console.log('List of Peeps');
-// });
-
-// app.get("/peeps/pickrand", function(req,res){
-// 	var id = Math.floor(Math.random() * peeps.length);
-//   	var q = peeps[id];
-//   	res.json(q);
-//   	console.log('Pick random peep');
-// });
-
-// app.get("/peeps/:peepid", function(req,res){
-// 	if(peeps.length <= req.params.peepid || req.params.peepid < 0) {
-//     res.statusCode = 404;
-//     return res.send('Error 404: No quote found');
-//   	}  
-// 	var q = peeps[req.params.peepid];
-//   	res.json(q);
-//   	console.log('Pick a peep');
-// });
