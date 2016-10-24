@@ -10,7 +10,6 @@ var fs = require('fs');
 var URL = require('url-parse');
 var url = require('url');
 const results=[];
-//var streamer = fs.createWriteStream("C:/Users/Pauline Sarana/Desktop/School/CMSC128/studybuddies/testing/test.txt");
 
 
 var client = new pg.Client(connectionString);
@@ -19,9 +18,6 @@ client.connect();
 //for create group
 app.get("/studybuddies/groupchat/insert/:gname", function(req,res){
 	client.query("insert into groupchat(groupname) values ('"+req.params.gname+"');");
-
-	// paths = "C:/Users/Pauline Sarana/Desktop/studybuddies/StudyBuddies/Server/testing/"+req.params.gname+".txt"; //change this path
-	// fs.writeFileSync(paths, data, "UTF-8", {'flags': 'a+'});
 
 	var data = "Halloo!!"
 	fs.writeFile("C:/Users/Pauline Sarana/Desktop/studybuddies/StudyBuddies/Server/testing/"+req.params.gname+".txt", data, function (err) {
@@ -33,12 +29,14 @@ app.get("/studybuddies/groupchat/insert/:gname", function(req,res){
 	console.log('Insert groupname in groupchat');
 	res.send('Inserted '+req.params.gname+' into groupchat');
 });
+
 //for registration of user, insert into buddy
 app.get("/studybuddies/buddy/insert/:username/:password/:fname/:lname", function(req,res){
 	client.query("insert into buddy(username,password,fname,lname) values ('"+req.params.username+"','"+req.params.password+"','"+req.params.fname+"','"+req.params.lname+"');");
 	console.log('Insert into buddy');
 	res.send('Inserted '+req.params.username+' into buddy');
 }); 
+
 //for log-in
 app.get("/studybuddies/buddy/login/:username/:password", function(req, res){
 	var results = [];
@@ -55,6 +53,7 @@ app.get("/studybuddies/buddy/login/:username/:password", function(req, res){
 	});
 	console.log('Logging In');
 });
+
 //pag view sa mga groupname
 app.get("/viewGroups",function(req,res){
 
@@ -71,6 +70,7 @@ app.get("/viewGroups",function(req,res){
 
     console.log("viewing..");
 });
+
 //wala pa ni
 app.get("/studybuddies/groupchat/select", function(req, res){
 	client.query("select * from groupchat", function(err, rows, fields){
