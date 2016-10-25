@@ -77,8 +77,8 @@ function scene:create( event )
 					print( "RESPONSE: ", event.response )
 				end
 			end
-			network.request( ("http://192.168.43.114:8080/studybuddies/groupchat/join/"..groupname.."/"..uid), "GET", networkListener)
-			-- network.request( ("http://localhost:8080/studybuddies/groupchat/join/"..groupname.."/"..uid), "GET", networkListener)
+			-- network.request( ("http://192.168.43.114:8080/studybuddies/groupchat/join/"..groupname.."/"..uid), "GET", networkListener)
+			network.request( ("http://localhost:8080/studybuddies/groupchat/join/"..groupname.."/"..uid), "GET", networkListener)
 			local options = {
 				effect = "crossFade",
 				time = 800,
