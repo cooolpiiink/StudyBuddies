@@ -5,13 +5,8 @@ local physics = require( "physics" )
 physics.start()
 physics.setGravity( 0, 0 )
 
-_W = display.viewableContentWidth
-_H = display.viewableContentHeight
-
 gap = _H * 0.65;
 size = _W * 0.0375;
-
-local uid
 
 local function fieldHandler( textField )
 	return function( event )
@@ -34,29 +29,69 @@ local function fieldHandler( textField )
 	end
 end
 
--- local path = system.pathForFile( "Message.txt", system.DocumentsDirectory )
+
+
+---------------------------------------------------------------------
 -- local upath = system.pathForFile("Username.txt", system.DocumentsDirectory)
+-- 	local ufile = io.open(upath, "a+")
+-- 	if not ufile then
+-- 		print("File Error: " .. errorString)
+-- 	else 
+-- 		local ucontents = ufile:read("*a")
 
--- local ufile = io.open(upath, "r")
--- if not ufile then
--- 	print("File Error: " .. errorString)
--- else
--- 	local ucon = ufile:read("*a")
+-- 		local path = system.pathForFile("Message.txt", system.DocumentsDirectory)
+-- 		local file = io.open(path, "a+")
 
--- local gap = _H * 0.05 
--- msgy = _H * 0.3
+-- 		if not file then
+-- 			print("File Error: " .. errorString)
+-- 		else 
+-- 			local contents = file:read("*a")
 
--- for line in io.lines( path ) do
+-- 			local msg = display.newText(ucontents .. ": " .. contents .. "\n", 0,0, "unicode.arialr.ttf", _W*0.05)
+-- 			msg.anchorX = 0;
+-- 			msg.x = _W * 0.150
+-- 			msg.y = _H * 0.32;
+-- 			msg:setTextColor(0,0,0)
 
---     print( line )
---     local msg = display.newText(ucon .. ": ".. line, 0, 0, "unicode.arialr.ttf", _W*0.05)
--- 	msg.anchorX = 0
+-- 			 print( "Contents of " .. path .. "\n" .. contents )
+
+-- 		    -- Close the file handle
+-- 		    	io.close( file )
+-- 		    	--file = nil
+-- 			end
+-- 		end
+	
+		--end
+
+local path = system.pathForFile( "Message.txt", system.DocumentsDirectory )
+local upath = system.pathForFile("Username.txt", system.DocumentsDirectory)
+
+local ufile = io.open(upath, "r")
+if not ufile then
+	print("File Error: " .. errorString)
+else
+	local ucon = ufile:read("*a")
+
+-- 	local msg = display.newText(ucontents .. ": " .. contents .. "\n", 0,0, "unicode.arialr.ttf", _W*0.05)
+-- 	msg.anchorX = 0;
 -- 	msg.x = _W * 0.150
--- 	msg.y = msgy
+-- 	msg.y = _H * 0.3;
 -- 	msg:setTextColor(0,0,0)
--- 	msgy = msgy + gap
--- end 
 -- end
+local gap = _H * 0.05 
+msgy = _H * 0.3
+
+for line in io.lines( path ) do
+
+    print( line )
+    local msg = display.newText(ucon .. ": ".. line, 0, 0, "unicode.arialr.ttf", _W*0.05)
+	msg.anchorX = 0
+	msg.x = _W * 0.150
+	msg.y = msgy
+	msg:setTextColor(0,0,0)
+	msgy = msgy + gap
+end 
+end
 
 local function printMsg()
 	
@@ -64,12 +99,11 @@ local function printMsg()
 
 end
 
-function scene:create (event)
+function scene:create (e)
+	search:removeSelf()
 	local sceneGroup = self.view
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 	physics.pause()
-
-	uid = event.params.uid
 
 	backGroup = display.newGroup()  -- Display group for the background image
 	sceneGroup:insert( backGroup )
@@ -79,8 +113,9 @@ function scene:create (event)
 	background.y = display.contentCenterY
 
 	local minibg = display.newRect(backGroup, display.contentCenterX, display.contentCenterY * 1.09, _W*0.9, _H*0.60)
-	minibg:setFillColor(1,0,0)	
+	minibg:setFillColor(1,0,0)
 	minibg.alpha = 0
+	--scrollView:insert(minibg)
 
 	local sendmsg = native.newTextField(_W * 0.43, _H * 0.9, _W * 0.64, _H * 0.065)
 	sendmsg:addEventListener("userInput", fieldHandler(function() return sendmsg end))
@@ -93,12 +128,22 @@ function scene:create (event)
 	send.y = _H * 0.9
 	send:addEventListener("tap", printMsg)	
 
-	function sendmsg:userInput(event)
-		if event.phase == "began" then
-			event.target.text =''
-		elseif event.phase == "ended" then
+	function sendmsg:userInput(e)
+		if e.phase == "began" then
+			e.target.text =''
+		elseif e.phase == "ended" then
+		-- 	local path = system.pathForFile( "txtMessage.txt", system.DocumentsDirectory )
 
+
+  --      		local file = io.open( path, "w" )
+  --      		file:write( e.target.text)
+	 --       		io.close( file )
+	 --       		file = nil 
+		-- 	--labelFeedback.text = "Thank you" .. " " .. event.target.text
 		elseif event.phase == "Submitted" then
+			--	labelFeedback.text = "Hello".. " " .. event.target.text
+			--  elseif event.phase == "editing" then
+			--	labelFeedback.text = event.startPosition 
 			file = nil
 		end
 	end
@@ -109,42 +154,10 @@ function scene:show(event)
 	local sceneGroup = self.view
 	local phase = event.phase
 
-	local scrollView = widget.newScrollView(
-    	{
-        	top = 100,
-	        left = 10,
-	        width = 600,
-	        height = 775,
-	        scrollWidth = 600,
-	        scrollHeight = 800,
-	        listener = scrollListener
-    	}
-	)
-
-	local function scrollListener( event )
-	    local phase = event.phase
-	    if ( phase == "began" ) then print( "Scroll view was touched" )
-	    elseif ( phase == "moved" ) then print( "Scroll view was moved" )
-	    elseif ( phase == "ended" ) then print( "Scroll view was released" )
-	    end
-
-	    -- In the event a scroll limit is reached...
-	    if ( event.limitReached ) then
-	        if ( event.direction == "up" ) then print( "Reached bottom limit" )
-	        elseif ( event.direction == "down" ) then print( "Reached top limit" )
-	        elseif ( event.direction == "left" ) then print( "Reached right limit" )
-	        elseif ( event.direction == "right" ) then print( "Reached left limit" )
-	        end
-	    end
-
-	    return true
-	end
-
 	if ( phase == "will" ) then
-		local bground = display.newText("Halloo",0,0, "unicode.arialr.ttf",32)
-		scrollView:insert(bground)
+		-- Code here runs when the scene is still off screen (but is about to come on screen)
 	elseif ( phase == "did" ) then
-
+		-- Code here runs when the scene is entirely on screen
 	end
 end
 

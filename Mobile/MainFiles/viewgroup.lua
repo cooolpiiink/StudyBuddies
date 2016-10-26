@@ -86,7 +86,7 @@ function scene:create( event )
 					uid = uid
 				}
 			}
-			composer.gotoScene("sendmsg", options)
+			--composer.gotoScene("groupchat", options)
 			print("Pressed")
 		end
 	end
