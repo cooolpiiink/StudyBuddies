@@ -21,6 +21,38 @@ local function gotoRegister()
     composer.gotoScene( "register", { time=800, effect="crossFade" })
 end
 
+local function handleButtonEvent( event )
+	local phase = event.phase
+
+	if "ended" == phase then
+		print("you pressed and released a button")
+	end
+end
+
+local myRegister = widget.newButton
+{
+	left = 230,
+	top = 620,
+	width = 300,
+	height = 50,
+	defaultFile = "default.png",
+	overFile = "over.png",
+	label = "REGISTER",
+	onEvent = handleButtonEvent,
+}
+
+local myLogin = widget.newButton
+{
+	left = 230,
+	top = 550,
+	width = 300,
+	height = 50,
+	defaultFile = "default.png",
+	overFile = "over.png",
+	label = "LOGIN",
+	onEvent = handleButtonEvent,
+}
+
 local function onComplete( event )
 	if (event.action == "clicked") then
 		local i = event.index
@@ -90,16 +122,12 @@ function scene:create( event )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
 
-	local title = display.newImageRect( sceneGroup, "study.png", 500, 80 )
+	local title = display.newImageRect( sceneGroup, "cool.png", 500, 80 )
 	title.x = display.contentCenterX
 	title.y = 200
 
 
-	labelUsername = display.newText( sceneGroup, "Username:", 375, 400, native.systemFont, 40)
-	sceneGroup:insert( labelUsername )
-
-	labelPassword = display.newText( sceneGroup, "Password:", 375, 545, native.systemFont, 40)
-	sceneGroup:insert( labelPassword )	
+	labelFeedback = display.newText( sceneGroup, "", 250, 300, native.systemFont, 28 )
 
 	
 	function  background:tap(event)
@@ -107,15 +135,12 @@ function scene:create( event )
 	end
 
 	background:addEventListener("tap", background)
+	sceneGroup:insert( myRegister )
+	sceneGroup:insert( myLogin )
+	myRegister:addEventListener("tap", gotoRegister)
+	myLogin:addEventListener("tap", gotoLogin)
 	
-	local loginButton = display.newText( sceneGroup, "Login", display.contentCenterX, 700, native.systemFont, 44 )
-	loginButton:setFillColor( 0.82, 0.86, 1 )
 
-	local registerButton = display.newText( sceneGroup, "Register", display.contentCenterX, 810, native.systemFont, 44 )
-	registerButton:setFillColor( 0.75, 0.78, 1 )
-
-	registerButton:addEventListener("tap", gotoRegister)
-	loginButton:addEventListener("tap", gotoLogin)
 end
 
 
@@ -130,13 +155,13 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
-		textUsername = native.newTextField(375, 470, 500, 60)
+		textUsername = native.newTextField(385, 390, 400, 60)
 		textUsername:addEventListener("userInput", fieldHandler(function() return textUsername end))
 		sceneGroup:insert( textUsername )
 		textUsername.size = 38
 		textUsername.placeholder = "Username"
 
-		textPassword = native.newTextField(375, 610, 500, 60)
+		textPassword = native.newTextField(385, 470, 400, 60)
 		textPassword:addEventListener("userInput", fieldHandler(function() return textPassword end))
 		sceneGroup:insert( textPassword )
 		textPassword.size = 38

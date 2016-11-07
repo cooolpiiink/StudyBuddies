@@ -1,6 +1,6 @@
 
 local composer = require( "composer" )
-
+local widget = require( "widget" )
 local scene = composer.newScene()
 
 local physics = require( "physics" )
@@ -38,6 +38,30 @@ local function gotoWelcome()
 
 	composer.gotoScene("menu", { time=800, effect="crossFade" })
 end
+
+local myRegister = widget.newButton
+{
+	left = 230,
+	top = 900,
+	width = 300,
+	height = 50,
+	defaultFile = "default.png",
+	overFile = "over.png",
+	label = "REGISTER",
+	onEvent = handleButtonEvent,
+}
+
+local myCheck = widget.newButton
+{
+	left = 230,
+	top = 835,
+	width = 300,
+	height = 50,
+	defaultFile = "default.png",
+	overFile = "over.png",
+	label = "CHECK",
+	onEvent = handleButtonEvent,
+}
 
 local function gotoCheck()
 	print("Check")
@@ -77,14 +101,10 @@ function scene:create( event )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
 
-	local register = display.newImageRect( backGroup, "c.png", 500, 80 )
+	local register = display.newImageRect( backGroup, "create.png", 550, 80 )
 	register.x = display.contentCenterX
 	register.y = 200
 	
-	registerButton = display.newText( sceneGroup, "Register", display.contentCenterX, 970, native.systemFont, 44 )
-	registerButton:setFillColor( 0.75, 0.78, 1 )
-	checkButton = display.newText( sceneGroup, "Check", display.contentCenterX, 910, native.systemFont, 44 )
-	checkButton:setFillColor( 0.75, 0.78, 1 )
 
 	labelFirstname = display.newText( sceneGroup, "Firstname:", 217, 300, native.systemFont, 40)
 	sceneGroup:insert( labelFirstname )
@@ -95,8 +115,11 @@ function scene:create( event )
 	labelPasswords = display.newText( sceneGroup, "Password:", 217, 720, native.systemFont, 40)
 	sceneGroup:insert( labelPasswords )
 	
-	registerButton:addEventListener("tap", gotoWelcome)
-	checkButton:addEventListener("tap", gotoCheck)
+	sceneGroup:insert( myCheck )
+	sceneGroup:insert( myRegister )
+	myRegister:addEventListener("tap", gotoWelcome)
+	myCheck:addEventListener("tap", gotoCheck)
+
 
 	function  background:tap(event)
 		native.setKeyboardFocus( nil )
